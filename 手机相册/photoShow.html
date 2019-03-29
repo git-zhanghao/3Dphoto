@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>手机相册</title>
+		<link rel="stylesheet" type="text/css" href="css/photo.css"/>
+		<link rel="stylesheet" href="css/swiper.min.css" />
+		<script src="js/jquery-1.7.2.js"></script>
+		<script src="js/swiper.min.js"></script>
+		<script src="js/photo.js"></script>
+		<script>
+			setRem();
+			
+			$(function(){
+				var aImg = $('.bottom-show div');
+				var aShow = $('.slide-item')
+				var now = 3 ;
+				var target;
+				setTimeout(function(){
+					tab(now);
+				},100)
+
+				
+				
+				var onoff = true;
+				for (var i = 0; i < aImg.length; i++) {
+					aImg[i].index = i;
+					aImg[i].onclick= function(){
+						for(var i=0; i<aImg.length; i++){
+							aImg[i].children[1].pause();
+							aImg[i].children[1].currentTime = 0;
+						}
+						if(!onoff){
+							return
+						}
+						onoff = false;
+						target = this.index;
+						
+						if( target > now ){
+							if( target - now <= 2) {
+								goNext();
+							}else{
+								goPrev();
+							}
+						}else if(target < now){
+							if(target + 10 - now <= 2){
+								goNext();
+							}else{
+								goPrev();
+							}
+						}else if(target == now){	//点击当前不运动
+							onoff = true;
+							return;
+						}
+					}
+				}
+
+				
+				function goNext(){//调用函数使图片往下一张切换
+					now ++;
+					if(now > 9){
+						now = 0;
+					}
+					console.log(now,target)
+					tab(now);
+					if(now == target){//运动完成 
+						onoff = true;
+						aImg.eq(target-1).find('audio').get(0).pause();
+						aImg.eq(target-1).find('audio').get(0).currentTime = 0;
+						aImg.eq(target).find('audio').get(0).play();
+						return;
+					}
+//					setTimeout(function(){
+//						goNext();
+//					},100)
+					goNext();
+				}
+				function goPrev(){//调用函数使图片往下一张切换
+					now --;
+					if(now < 0){
+						now = 9;
+					}
+					
+					tab(now);
+					if(now == target){
+						onoff = true;
+						aImg.eq(target+1).find('audio').get(0).pause();
+						aImg.eq(target+1).find('audio').get(0).currentTime = 0;
+						aImg.eq(now).find('audio').get(0).play();
+						return;
+					}
+//					setTimeout(function(){
+//						goPrev();
+//					},100)
+					goPrev();
+				}
+
+				
+				function tab(n){
+					var num = Math.floor(aImg.length/2);
+					for (var i = 0; i < num; i++) {
+						var Left = n - 1 - i;
+//						console.log(Left)
+						if(Left < 0){
+							Left = Left + 10;
+						}
+						aImg.eq(Left).css({
+							transform : "translateX("+(-3.6*(i+1))+"rem) translateZ("+(80-i*50)/50+"rem) rotateY(30deg)"
+						});
+						var Right = n + 1 + i;
+//						console.log(Right)
+						if(Right > 9){
+							Right = Right - 10;
+						}
+						aImg.eq(Right).css({
+							transform : "translateX("+(3.6*(i+1))+"rem) translateZ("+(80-i*50)/50+"rem) rotateY(-30deg)"
+						});
+						aImg.eq(n).css({
+							transform : "translateZ(1.6rem)"
+						})
+					}
+					aShow.hide();
+					aShow.eq(n).show();
+					aImg.eq(n).find('audio').get(0).play();
+				}
+				
+				$('.slide-item').on("click",function(ev){
+					var n = $(this).index();
+					$('.pop-shadow').show();
+    				var swiper = new Swiper('.artAdd', {
+						zoom: true,
+				    });
+				    swiper.slideTo(n, null, false);
+				    ev.stopPropagation();
+				});
+				$('.pop-shadow').on("click",function(){
+					$(this).hide();
+				})
+				
+			})
+		</script>
+	</head>
+	<body>
+		<div class="wrap">
+			<div class="slide-show">
+				<div class="slide-item">
+					<div class="big-img" style="background-image: url(images/00.jpg);"></div>
+					<div class="slide-dec">
+						<header>图片标题字段00</header>
+						<section>图片文字描述图片文字描述图片文字描述图片文字描述</section>
+					</div>
+				</div>
+				
+				<div class="slide-item">
+					<div class="big-img" style="background-image: url(images/01.jpg);"></div>
+					<div class="slide-dec">
+						<header>图片标题字段01</header>
+						<section>图片文字描述图片文字描述图片文字描述图片文字描述</section>
+					</div>
+				</div>
+				
+				<div class="slide-item">
+					<div class="big-img" style="background-image: url(images/02.jpg);"></div>
+					<div class="slide-dec">
+						<header>图片标题字段02</header>
+						<section>图片文字描述图片文字描述图片文字描述图片文字描述</section>
+					</div>
+				</div>
+				
+				<div class="slide-item">
+					<div class="big-img" style="background-image: url(images/03.jpg);"></div>
+					<div class="slide-dec">
+						<header>图片标题字段03</header>
+						<section>图片文字描述图片文字描述图片文字描述图片文字描述</section>
+					</div>
+				</div>
+				
+				<div class="slide-item">
+					<div class="big-img" style="background-image: url(images/04.jpg);"></div>
+					<div class="slide-dec">
+						<header>图片标题字段04</header>
+						<section>图片文字描述图片文字描述图片文字描述图片文字描述</section>
+					</div>
+				</div>
+				
+				<div class="slide-item">
+					<div class="big-img" style="background-image: url(images/05.jpg);"></div>
+					<div class="slide-dec">
+						<header>图片标题字段05</header>
+						<section>图片文字描述图片文字描述图片文字描述图片文字描述</section>
+					</div>
+				</div>
+				
+				<div class="slide-item">
+					<div class="big-img" style="background-image: url(images/06.jpg);"></div>
+					<div class="slide-dec">
+						<header>图片标题字段06</header>
+						<section>图片文字描述图片文字描述图片文字描述图片文字描述</section>
+					</div>
+				</div>
+				
+				<div class="slide-item">
+					<div class="big-img" style="background-image: url(images/07.jpg);"></div>
+					<div class="slide-dec">
+						<header>图片标题字段07</header>
+						<section>图片文字描述图片文字描述图片文字描述图片文字描述</section>
+					</div>
+				</div>
+				
+				<div class="slide-item">
+					<div class="big-img" style="background-image: url(images/08.jpg);"></div>
+					<div class="slide-dec">
+						<header>图片标题字段08</header>
+						<section>图片文字描述图片文字描述图片文字描述图片文字描述</section>
+					</div>
+				</div>
+				
+				<div class="slide-item">
+					<div class="big-img" style="background-image: url(images/09.jpg);"></div>
+					<div class="slide-dec">
+						<header>图片标题字段09</header>
+						<section>图片文字描述图片文字描述图片文字描述图片文字描述</section>
+					</div>
+				</div>
+			</div>
+			
+			<div class="bottom-show">
+				<div style="background-image: url(images/00.jpg);">
+					<span style="background-image: url(images/00.jpg);"></span>
+					<audio src="sound/00.mp3"></audio>
+				</div>
+				
+				<div style="background-image: url(images/01.jpg);">
+					<span style="background-image: url(images/01.jpg);"></span>
+					<audio src="sound/01.mp3"></audio>
+				</div>
+				
+				<div style="background-image: url(images/02.jpg);">
+					<span style="background-image: url(images/02.jpg);"></span>
+					<audio src="sound/02.mp3"></audio>
+				</div>
+				
+				<div style="background-image: url(images/03.jpg);">
+					<span style="background-image: url(images/03.jpg);"></span>
+					<audio src="sound/03.mp3"></audio>
+				</div>
+				
+				<div style="background-image: url(images/04.jpg);">
+					<span style="background-image: url(images/04.jpg);"></span>
+					<audio src="sound/04.mp3"></audio>
+				</div>
+				
+				<div style="background-image: url(images/05.jpg);">
+					<span style="background-image: url(images/05.jpg);"></span>
+					<audio src="sound/05.mp3"></audio>
+				</div>
+				
+				<div style="background-image: url(images/06.jpg);">
+					<span style="background-image: url(images/06.jpg);"></span>
+					<audio src="sound/06.mp3"></audio>
+				</div>
+				
+				<div style="background-image: url(images/07.jpg);">
+					<span style="background-image: url(images/07.jpg);"></span>
+					<audio src="sound/07.mp3"></audio>
+				</div>
+				
+				<div style="background-image: url(images/08.jpg);">
+					<span style="background-image: url(images/08.jpg);"></span>
+					<audio src="sound/08.mp3"></audio>
+				</div>
+				
+				<div style="background-image: url(images/09.jpg);">
+					<span style="background-image: url(images/09.jpg);"></span>
+					<audio src="sound/09.mp3"></audio>
+				</div>
+			</div>
+		</div>
+		
+		<!--
+        	描述：弹出
+        -->
+        <div class="pop-shadow">
+        	<div class="artAdd" style="width: 100%; height: 100%; position: relative; overflow: hidden;">
+		    	<div class="swiper-wrapper">
+			      <div class="swiper-slide">
+			      	<div class="swiper-zoom-container"><img src="images/00.jpg" alt="" /></div>
+			      </div>
+			      <div class="swiper-slide">
+			      	<div class="swiper-zoom-container"><img src="images/01.jpg" alt="" /></div>
+			      </div>
+			      <div class="swiper-slide">
+			      	<div class="swiper-zoom-container"><img src="images/02.jpg" alt="" /></div>
+			      </div>
+			      <div class="swiper-slide">
+			      	<div class="swiper-zoom-container"><img src="images/03.jpg" alt="" /></div>
+			      </div>
+			      <div class="swiper-slide">
+			      	<div class="swiper-zoom-container"><img src="images/04.jpg" alt="" /></div>
+			      </div>
+			      <div class="swiper-slide">
+			      	<div class="swiper-zoom-container"><img src="images/05.jpg" alt="" /></div>
+			      </div>
+			      <div class="swiper-slide">
+			      	<div class="swiper-zoom-container"><img src="images/06.jpg" alt="" /></div>
+			      </div>
+			      <div class="swiper-slide">
+			      	<div class="swiper-zoom-container"><img src="images/07.jpg" alt="" /></div>
+			      </div>
+			      <div class="swiper-slide">
+			      	<div class="swiper-zoom-container"><img src="images/08.jpg" alt="" /></div>
+			      </div>
+			      <div class="swiper-slide">
+			      	<div class="swiper-zoom-container"><img src="images/09.jpg" alt="" /></div>
+			      </div>
+			      <div class="swiper-slide">
+			      	<div class="swiper-zoom-container"><img src="images/00.jpg" alt="" /></div>
+			      </div>
+			    </div>
+		    </div>
+        </div>
+	</body>
+</html>
